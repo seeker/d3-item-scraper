@@ -1,0 +1,17 @@
+# python bytecode files
+*.pyc
+*.pyo
+
+# build directory
+build/
+d3_item_scraper.egg-info/
+dist/
+
+# coverage directories
+/.coverage
+/htmlcov
+
+# ignore IDE project files
+/.pydevproject
+/.project
+/.settings
