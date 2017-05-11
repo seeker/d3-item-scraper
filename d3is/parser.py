@@ -1,6 +1,8 @@
 from bs4.element import SoupStrainer
 from bs4 import BeautifulSoup
 from d3is.item import Item
+import logging
+
 class Parser(object):
     '''
     Parses html into items.
@@ -15,18 +17,25 @@ class Parser(object):
         pass
         
     def items(self, html):
-        rows = BeautifulSoup(html, "html.parser", parse_only=self.filter_legendary)
-        legendaries = rows.find_all(class_="legendary")
+        rows = BeautifulSoup(html, "html.parser")
+        legendaries = rows.select("tr.legendary")
         
         items = []
         
         for leg in legendaries:
             try:
                 item_name = leg.find('a', class_='d3-color-orange').text
-                item_text = leg.find('li', class_='d3-color-orange').text
+                text = leg.find('li', class_='d3-color-orange')
+                
+                if text == None:
+                    logging.warn("{} has no affix, skipping...".format(item_name))
+                    continue
+                
+                item_text = text.text
+                
                 items.append(Item(item_name, item_text))
             except(AttributeError):
-                print("Failed to parse {}".format(leg))
+                logging.error("Failed to parse {}".format(item_name))
             
         return items
     
