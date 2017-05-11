@@ -25,14 +25,6 @@ class TestParser(BetamaxTestCase):
 
     def setUp (self):
         super(TestParser, self).setUp()
-        with codecs.open('test/html/ring-fragment.xht', 'r', 'utf-8') as f:
-            self.test_html_ring = f.read()
-            f.close()
-        
-        with codecs.open('test/html/pagination-fragment.xht', 'r', 'utf-8') as f:
-            self.test_html_pagination = f.read()
-            f.close()
-            
         self.cut = Parser()
 
     def get_ring_page(self):
