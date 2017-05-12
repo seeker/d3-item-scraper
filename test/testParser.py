@@ -1,57 +1,95 @@
-'''
-Created on 11 May 2017
-
-@author: Nicholas Wright
-'''
 import unittest
-import codecs
 
 from d3is.parser import Parser
 from d3is.item import Item
 from betamax import Betamax
-from betamax.fixtures.unittest import BetamaxTestCase
+from requests import Session
 
-with Betamax.configure() as config:
-    config.cassette_library_dir = 'test/cassettes'
+CASSETTE_LIBRARY_DIR = 'test/cassettes'
 
-class TestParser(BetamaxTestCase):
-    url = 'https://us.battle.net/d3/en/item/ring/'
+CAT_WEAPONS = 'weapons'
+CAT_ARMOR = 'armor'
+CAT_JEWLRY = 'jewelry'
 
-    def generate_cassette_name(self):
-        '''
-            Reuse one cassette for all tests
-        '''
-        return getattr(self, '__class__').__name__
+class TestParser(unittest.TestCase):
+    url_ring = 'https://us.battle.net/d3/en/item/ring/'
+    url_item = 'https://eu.battle.net/d3/en/item/'
 
     def setUp (self):
-        super(TestParser, self).setUp()
+        session = Session()
+        recorder = Betamax(
+            session, cassette_library_dir=CASSETTE_LIBRARY_DIR
+        )
+    
+        with recorder.use_cassette('ring-page'):
+            self.ring_page = session.get(self.url_ring).text
+            
+        with recorder.use_cassette('item-page'):
+            self.item_page = session.get(self.url_item).text
+        
         self.cut = Parser()
+        self.categories = self.cut.categories(self.get_item_page())
+        self.items = self.cut.items(self.get_ring_page())
 
     def get_ring_page(self):
-        return self.session.get(self.url).text
+        return self.ring_page
+    
+    def get_item_page(self):
+        return self.item_page
 
     def test_parsed_item_count(self):
-        items = self.cut.items(self.get_ring_page())
-        
-        self.assertEqual(len(items), 34)
+        self.assertEqual(len(self.items), 34)
         
     def test_parsed_item_text_with_variables(self):
-        items = self.cut.items(self.get_ring_page())
-        
-        self.assertIn(Item("Halo of Karini", "You take 45–60% less damage for 3 seconds after your Storm Armor electrocutes an enemy more than 30 yards away."), items)
+        self.assertIn(Item("Halo of Karini", "You take 45–60% less damage for 3 seconds after your Storm Armor electrocutes an enemy more than 30 yards away."), self.items)
         
     def test_parsed_item_text_with_symbols(self):
-        items = self.cut.items(self.get_ring_page())
-        
-        self.assertIn(Item("The Tall Man's Finger", "Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined."), items)
+        self.assertIn(Item("The Tall Man's Finger", "Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined."), self.items)
 
     def test_parsed_item_text(self):
-        items = self.cut.items(self.get_ring_page())
-        
-        self.assertIn(Item("Ring of Royal Grandeur", "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."), items)
+        self.assertIn(Item("Ring of Royal Grandeur", "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."), self.items)
 
     def test_parsed_pages(self):
         self.assertEqual(self.cut.pages(self.get_ring_page()), 4)
+        
+    def test_parse_category_weapons(self):
+        self.assertIn(CAT_WEAPONS, self.categories)
+        
+    def test_parse_category_armor(self):
+        self.assertIn(CAT_ARMOR, self.categories)
+        
+    def test_parse_category_jewelry(self):
+        self.assertIn(CAT_JEWLRY, self.categories)
+        
+    def test_parse_category_weapons_dagger_link(self):
+        self.assertIn('/d3/en/item/dagger/',self.categories[CAT_WEAPONS])
+        
+    def test_parse_category_armor_boots_link(self):
+        self.assertIn('/d3/en/item/boots/',self.categories[CAT_ARMOR])
+        
+    def test_parse_category_jewelry_link(self):
+        self.assertListEqual(self.categories[CAT_JEWLRY], ['/d3/en/item/amulet/','/d3/en/item/ring/'])
+        
+    def test_amulet_not_in_armor_category(self):
+        self.assertNotIn('/d3/en/item/amulet/', self.categories[CAT_ARMOR])
+        
+    def test_ring_not_in_armor_category(self):
+        self.assertNotIn('/d3/en/item/ring/', self.categories[CAT_ARMOR])
+        
+    def test_follower_item_enchantress_not_in_weapons(self):
+        self.assertNotIn('/d3/en/item/enchantress-focus/',self.categories[CAT_ARMOR])
+    
+    def test_follower_item_scoundrel_not_in_weapons(self):
+        self.assertNotIn('/d3/en/item/scoundrel-token/',self.categories[CAT_ARMOR])
+    
+    def test_follower_item_templar_not_in_weapons(self):
+        self.assertNotIn('/d3/en/item/templar-relic/',self.categories[CAT_ARMOR])
+        
+    def test_weapon_type_count(self):
+        self.assertEqual(len(self.categories[CAT_WEAPONS]), 21)
 
-if __name__ == "__main__":
-    unittest.main()
+    def test_jewlry_type_count(self):
+        self.assertEqual(len(self.categories[CAT_JEWLRY]), 2)
+        
+    def test_armor_type_count(self):
+        self.assertEqual(len(self.categories[CAT_ARMOR]), 18)     
