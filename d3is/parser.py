@@ -51,6 +51,10 @@ class Parser(object):
         result_dict['armor'] = armor_links
     
     def parse_weapon_links(self, soup, result_dict):
+        '''
+        Parse the weapon category.
+        '''
+        
         weapons = soup.select_one("div.column-2")
         weapon_links_elem = weapons.find_all("a", href=True)
         
@@ -73,6 +77,11 @@ class Parser(object):
         return categories;
     
     def items(self, html):
+        '''
+        Get the items on a item page.
+        Only items with an orange affix text will be included.
+        '''
+        
         rows = BeautifulSoup(html, "html.parser")
         legendaries = rows.select("tr.legendary")
         
@@ -96,6 +105,10 @@ class Parser(object):
         return items
     
     def pages(self, html):
+        '''
+        Get the number of pages on the item page.
+        '''
+        
         ul = BeautifulSoup(html, 'html.parser', parse_only=self.filter_ul)
         pagination = ul.find('ul', class_='ui-pagination')
         return len(pagination.find_all('a'))
