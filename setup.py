@@ -3,7 +3,9 @@
 from setuptools import setup, find_packages
 
 requirements = [
-    'beautifulsoup4'
+    'beautifulsoup4',
+	'requests',
+	'simplejson'
 ]
 
 test_requirements = [
