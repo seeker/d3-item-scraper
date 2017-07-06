@@ -15,3 +15,6 @@ dist/
 /.pydevproject
 /.project
 /.settings
+
+# setup files
+/.eggs/
