@@ -11,6 +11,10 @@ CAT_WEAPONS = 'weapons'
 CAT_ARMOR = 'armor'
 CAT_JEWLRY = 'jewelry'
 
+CAT_ARMOR_ITEM_COUNT = 19;
+CAT_WEAPONS_ITEM_COUNT = 23;
+PARSED_ITEM_COUNT = 38;
+
 class TestParser(unittest.TestCase):
     url_ring = 'https://us.battle.net/d3/en/item/ring/'
     url_item = 'https://eu.battle.net/d3/en/item/'
@@ -38,7 +42,7 @@ class TestParser(unittest.TestCase):
         return self.item_page
 
     def test_parsed_item_count(self):
-        self.assertEqual(len(self.items), 34)
+        self.assertEqual(len(self.items), PARSED_ITEM_COUNT)
         
     def test_parsed_item_text_with_variables(self):
         self.assertIn(Item("Halo of Karini", "You take 45–60% less damage for 3 seconds after your Storm Armor electrocutes an enemy more than 30 yards away."), self.items)
@@ -86,10 +90,10 @@ class TestParser(unittest.TestCase):
         self.assertNotIn('/d3/en/item/templar-relic/',self.categories[CAT_ARMOR])
         
     def test_weapon_type_count(self):
-        self.assertEqual(len(self.categories[CAT_WEAPONS]), 21)
+        self.assertEqual(len(self.categories[CAT_WEAPONS]), CAT_WEAPONS_ITEM_COUNT)
 
     def test_jewlry_type_count(self):
         self.assertEqual(len(self.categories[CAT_JEWLRY]), 2)
         
     def test_armor_type_count(self):
-        self.assertEqual(len(self.categories[CAT_ARMOR]), 18)     
+        self.assertEqual(len(self.categories[CAT_ARMOR]), CAT_ARMOR_ITEM_COUNT)     
