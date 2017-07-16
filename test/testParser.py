@@ -52,6 +52,9 @@ class TestParser(unittest.TestCase):
 
     def test_parsed_item_text(self):
         self.assertIn(Item("Ring of Royal Grandeur", "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."), self.items)
+        
+    def test_last_page_parsed(self):
+        self.assertIn(Item("Briggs' Wrath","Uncursed enemies are pulled to the target location when a curse is applied to them."), self.items)
 
     def test_parsed_pages(self):
         self.assertEqual(self.cut.pages(self.get_ring_page()), 4)
