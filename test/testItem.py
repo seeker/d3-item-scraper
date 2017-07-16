@@ -31,6 +31,9 @@ class Test(unittest.TestCase):
         
     def test_item_string(self):
         self.assertEqual(str(self.item_a), "foo: bar")
+        
+    def test_item_repr(self):
+        self.assertEqual(str([self.item_a]), "[foo: bar]")
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
