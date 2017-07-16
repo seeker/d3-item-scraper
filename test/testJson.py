@@ -6,7 +6,7 @@ Created on 6 Jul 2017
 import unittest
 
 from d3is.item import Item
-from d3is.json import JsonItemEncoder
+from d3is.customJson import JsonItemEncoder
 
 import json
 

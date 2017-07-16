@@ -6,14 +6,14 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
     import requests
     import logging
-    import json
+    import customJson
     
     from d3is.item import Item
     from d3is.parser import Parser
     from d3is.loader import Loader
     from operator import attrgetter
     from d3is.item import Item
-    from d3is.json import JsonItemEncoder
+    from d3is.customJson import JsonItemEncoder
     
     BASE_URL = 'https://eu.battle.net'
     ITEM_BASE_URL = 'https://eu.battle.net/d3/en/item/'
@@ -51,5 +51,5 @@ if __name__ == "__main__":
         items[key] = process_category(categories[key])
 
     with open('items.json', 'w') as outfile:
-        json.dump(items, outfile, cls=JsonItemEncoder, sort_keys=True)
+        customJson.dump(items, outfile, cls=JsonItemEncoder, sort_keys=True)
     
