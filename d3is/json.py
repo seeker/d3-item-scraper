@@ -3,9 +3,9 @@ Created on 6 Jul 2017
 
 @author: Nicholas Wright
 '''
-import json
+from json import JSONEncoder
 
-class JsonItemEncoder(json.JSONEncoder):
+class JsonItemEncoder(JSONEncoder):
     '''
     Simple Json encoder to encode items to json
     '''
@@ -20,4 +20,4 @@ class JsonItemEncoder(json.JSONEncoder):
         else:
             return item
 
-        return json.JSONEncoder.default(self, o)
+        return JSONEncoder.default(self, o)
