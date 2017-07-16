@@ -40,3 +40,8 @@ class TestLoader(unittest.TestCase):
         html = self.cut.load_items_html("/d3/en/item/ring/")
         
         self.assertIn("Halo of Karini", html)
+        
+    def test_load_item_index(self):
+        html = self.cut.load_item_index()
+        
+        self.assertIn("Rings", html)

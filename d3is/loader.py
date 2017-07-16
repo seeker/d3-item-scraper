@@ -28,3 +28,9 @@ class Loader(object):
         link = "{}{}".format(self.base_url,item_page_link)
         logging.debug("Processing link {}".format(link))
         return self.session.get(link).text
+
+    def load_item_index(self):
+        '''
+        Load the main item page.
+        '''
+        return self.load_items_html('/d3/en/item/')
