@@ -93,7 +93,7 @@ class Parser(object):
                 text = leg.find('li', class_='d3-color-orange')
                 
                 if text == None:
-                    logging.warn("{} has no affix, skipping...".format(item_name))
+                    logging.debug("{} has no affix, skipping...".format(item_name))
                     continue
                 
                 item_text = text.text
