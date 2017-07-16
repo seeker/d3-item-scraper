@@ -19,3 +19,6 @@ dist/
 
 # setup files
 /.eggs/
+
+# generated json file
+items.json
