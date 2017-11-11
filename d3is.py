@@ -6,7 +6,7 @@ if __name__ == "__main__":
     from argparse import ArgumentParser
     import requests
     import logging
-    import customJson
+    import json
     
     from d3is.item import Item
     from d3is.parser import Parser
@@ -51,5 +51,4 @@ if __name__ == "__main__":
         items[key] = process_category(categories[key])
 
     with open('items.json', 'w') as outfile:
-        customJson.dump(items, outfile, cls=JsonItemEncoder, sort_keys=True)
-    
+        json.dump(items, outfile, cls=JsonItemEncoder, sort_keys=True)
