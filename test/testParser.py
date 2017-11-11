@@ -57,7 +57,7 @@ class TestParser(unittest.TestCase):
         self.assertIn(Item("Briggs' Wrath","Uncursed enemies are pulled to the target location when a curse is applied to them."), self.items)
 
     def test_parsed_pages(self):
-        self.assertEqual(self.cut.pages(self.get_ring_page()), 4)
+        self.assertEqual(self.cut.pages(self.get_ring_page()), 3)
         
     def test_parse_category_weapons(self):
         self.assertIn(CAT_WEAPONS, self.categories)
