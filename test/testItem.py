@@ -14,6 +14,8 @@ class Test(unittest.TestCase):
         self.item_b = Item("foo", "bar")
         self.item_c = Item("fo", "bar")
         self.item_d = Item("foo", "baz")
+        self.item_e = Item(" foo ", " baz ")
+
 
 
     def tearDown(self):
@@ -34,6 +36,9 @@ class Test(unittest.TestCase):
         
     def test_item_repr(self):
         self.assertEqual(str([self.item_a]), "[foo: bar]")
+
+    def test_text_trim(self):
+        self.assertEqual(self.item_d, self.item_e)
 
 if __name__ == "__main__":
     #import sys;sys.argv = ['', 'Test.testName']
