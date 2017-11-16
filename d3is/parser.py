@@ -90,7 +90,7 @@ class Parser(object):
         for leg in legendaries:
             try:
                 item_name = leg.find('a', class_='d3-color-orange').text
-                text = leg.find('span', class_='d3-color-ffff8000')
+                text = leg.find('span', class_='d3-color-ffff8000').parent
                 
                 if text == None:
                     logging.debug("{} has no affix, skipping...".format(item_name))

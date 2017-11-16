@@ -45,16 +45,16 @@ class TestParser(unittest.TestCase):
         self.assertEqual(len(self.items), PARSED_ITEM_COUNT)
         
     def test_parsed_item_text_with_variables(self):
-        self.assertIn(Item("Halo of Karini", "You take 45–60% less damage for 3 seconds after your Storm Armor electrocutes an enemy more than 30 yards away."), self.items)
+        self.assertIn(Item("Halo of Karini", "You take 74% less damage for 5 seconds after your Storm Armor electrocutes an enemy more than 15 yards away. (Wizard Only) [60 - 80]%"), self.items)
         
     def test_parsed_item_text_with_symbols(self):
-        self.assertIn(Item("The Tall Man's Finger", "Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined."), self.items)
+        self.assertIn(Item("The Tall Man's Finger", "Zombie Dogs instead summons a single gargantuan dog with more damage and health than all other dogs combined. (Witch Doctor Only)"), self.items)
 
     def test_parsed_item_text(self):
         self.assertIn(Item("Ring of Royal Grandeur", "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."), self.items)
         
     def test_last_page_parsed(self):
-        self.assertIn(Item("Briggs' Wrath","Uncursed enemies are pulled to the target location when a curse is applied to them."), self.items)
+        self.assertIn(Item("Briggs' Wrath","Uncursed enemies are pulled to the target location when a curse is applied to them. (Necromancer Only)"), self.items)
 
     def test_parsed_pages(self):
         self.assertEqual(self.cut.pages(self.get_ring_page()), 3)
