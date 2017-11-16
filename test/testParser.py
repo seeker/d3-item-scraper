@@ -13,7 +13,7 @@ CAT_JEWLRY = 'jewelry'
 
 CAT_ARMOR_ITEM_COUNT = 19;
 CAT_WEAPONS_ITEM_COUNT = 23;
-PARSED_ITEM_COUNT = 38;
+PARSED_ITEM_COUNT = 36;
 
 class TestParser(unittest.TestCase):
     url_ring = 'https://us.battle.net/d3/en/item/ring/'
