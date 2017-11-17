@@ -28,17 +28,28 @@ class Parser(object):
 
         return False
 
+    def parse_offhand(self,weapon_links, plain_link):
+        for j in ['shield', 'mojo', 'orb', 'quiver', 'phylactery']:
+            if j in plain_link:
+                weapon_links.append(plain_link)
+                return True
+
+        return False
+
     def parse_armor_links(self, soup, result_dict):
-        '''
+        """
         Parse the armor category.
-        This will be split up into armor and jewelry.
-        '''
+        This will be split up into armor, jewelry and weapons.
+        This is due to Kanai's cube categorising offhand items as weapons.
+        """
         
         armor = soup.select_one("div.column-1")
         links = armor.find_all("a", href=True)
         
         armor_links = []
         jewelry_links = []
+        weapon_links = []
+
         for link in links:
             plain_link = link['href']
 
@@ -47,26 +58,30 @@ class Parser(object):
             
             if self.parse_jewelry(jewelry_links, plain_link):
                 continue
-            
+
+            if self.parse_offhand(weapon_links,  plain_link):
+                continue
+
             armor_links.append(plain_link)
-            
+
         result_dict['jewelry'] = jewelry_links
         result_dict['armor'] = armor_links
+        result_dict['weapons'] = weapon_links
 
     def parse_weapon_links(self, soup, result_dict):
         '''
         Parse the weapon category.
         '''
-        
+
         weapons = soup.select_one("div.column-2")
         weapon_links_elem = weapons.find_all("a", href=True)
-        
+
         weapon_links = []
         for link in weapon_links_elem:
             weapon_links.append(link['href'])
-        
-        result_dict['weapons'] = weapon_links        
-    
+
+        result_dict['weapons'].extend(weapon_links)
+
     def categories(self, html):
         '''
         Returns a dict with the categories and matching links
@@ -78,7 +93,7 @@ class Parser(object):
         self.parse_weapon_links(soup, categories)
 
         return categories;
-    
+
     def items(self, html):
         '''
         Get the items on a item page.

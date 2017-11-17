@@ -11,8 +11,8 @@ CAT_WEAPONS = 'weapons'
 CAT_ARMOR = 'armor'
 CAT_JEWLRY = 'jewelry'
 
-CAT_ARMOR_ITEM_COUNT = 19;
-CAT_WEAPONS_ITEM_COUNT = 23;
+CAT_ARMOR_ITEM_COUNT = 13;
+CAT_WEAPONS_ITEM_COUNT = 29;
 PARSED_ITEM_COUNT = 36;
 
 class TestParser(unittest.TestCase):
@@ -100,3 +100,6 @@ class TestParser(unittest.TestCase):
         
     def test_armor_type_count(self):
         self.assertEqual(len(self.categories[CAT_ARMOR]), CAT_ARMOR_ITEM_COUNT)     
+
+    def test_shield_in_weapon_category(self):
+        self.assertIn('/d3/en/item/shield/', self.categories[CAT_WEAPONS])
