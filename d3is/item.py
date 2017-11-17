@@ -4,8 +4,8 @@ class Item(object):
     """
 
     def __init__(self, name, affix):
-        self.name = name
-        self.affix = affix
+        self.name = name.strip()
+        self.affix = affix.strip()
     
     def __eq__(self, other):
         return self.__dict__ == other.__dict__

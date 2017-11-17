@@ -90,8 +90,16 @@ class Parser(object):
         for leg in legendaries:
             try:
                 item_name = leg.find('a', class_='d3-color-orange').text
-                text = leg.find('li', class_='d3-color-orange')
-                
+
+                if item_name == "Ring of Royal Grandeur":
+                    '''
+                    Blizzard uses the wrong color on the item page, which breaks the parser.
+                    '''
+                    items.append(Item(item_name, "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."))
+                    continue
+
+                text = leg.find('span', class_='d3-color-ffff8000').parent
+
                 if text == None:
                     logging.debug("{} has no affix, skipping...".format(item_name))
                     continue
