@@ -18,7 +18,16 @@ class Parser(object):
 
     def __init__(self):
         pass
-    
+
+
+    def parse_jewelry(self,jewelry_links, plain_link):
+        for j in ['ring', 'amulet']:
+            if j in plain_link:
+                jewelry_links.append(plain_link)
+                return True
+
+        return False
+
     def parse_armor_links(self, soup, result_dict):
         '''
         Parse the armor category.
@@ -32,24 +41,18 @@ class Parser(object):
         jewelry_links = []
         for link in links:
             plain_link = link['href']
-            skip = False
-            
-            if self.follower_item_filter.match(plain_link) != None:
+
+            if self.follower_item_filter.match(plain_link) is not None:
                 continue
             
-            for j in ['ring', 'amulet']:
-                if j in plain_link:
-                    jewelry_links.append(plain_link)
-                    skip = True
-            
-            if skip:
+            if self.parse_jewelry(jewelry_links, plain_link):
                 continue
             
             armor_links.append(plain_link)
             
         result_dict['jewelry'] = jewelry_links
         result_dict['armor'] = armor_links
-    
+
     def parse_weapon_links(self, soup, result_dict):
         '''
         Parse the weapon category.
