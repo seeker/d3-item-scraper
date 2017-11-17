@@ -4,6 +4,7 @@ from d3is.parser import Parser
 from d3is.item import Item
 from betamax import Betamax
 from requests import Session
+from filter import ExtractionFilter
 
 CASSETTE_LIBRARY_DIR = 'test/cassettes'
 
@@ -31,7 +32,10 @@ class TestParser(unittest.TestCase):
         with recorder.use_cassette('item-page'):
             self.item_page = session.get(self.url_item).text
         
-        self.cut = Parser()
+        self.parse_pages()
+
+    def parse_pages(self, item_filter = None):
+        self.cut = Parser(item_filter)
         self.categories = self.cut.categories(self.get_item_page())
         self.items = self.cut.items(self.get_ring_page())
 
@@ -103,3 +107,8 @@ class TestParser(unittest.TestCase):
 
     def test_shield_in_weapon_category(self):
         self.assertIn('/d3/en/item/shield/', self.categories[CAT_WEAPONS])
+
+    def test_item_filter(self):
+        self.parse_pages(ExtractionFilter())
+
+        self.assertNotIn(Item("Hellfire Ring", "Chance on hit to engulf the ground in lava, dealing 200% weapon damage per second for 6 seconds."), self.items)

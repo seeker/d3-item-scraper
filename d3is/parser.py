@@ -1,6 +1,7 @@
 from bs4.element import SoupStrainer
 from bs4 import BeautifulSoup
 from d3is.item import Item
+from itertools import filterfalse
 import logging
 
 class Parser(object):
@@ -16,8 +17,8 @@ class Parser(object):
     
     follower_item_filter = re.compile('.*(enchantress\-focus|scoundrel\-token|templar\-relic)/$')
 
-    def __init__(self):
-        pass
+    def __init__(self, item_filter=None):
+        self.item_filter = item_filter
 
 
     def parse_jewelry(self,jewelry_links, plain_link):
@@ -82,6 +83,9 @@ class Parser(object):
 
         result_dict['weapons'].extend(weapon_links)
 
+    def filter_items(self, items):
+        items[:] = filterfalse(self.item_filter.filter_item_name, items)
+
     def categories(self, html):
         '''
         Returns a dict with the categories and matching links
@@ -127,7 +131,10 @@ class Parser(object):
                 items.append(Item(item_name, item_text))
             except(AttributeError):
                 logging.error("Failed to parse {}".format(item_name))
-            
+
+        if self.item_filter is not None:
+            self.filter_items(items)
+
         return items
     
     def pages(self, html):

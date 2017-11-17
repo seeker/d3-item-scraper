@@ -14,6 +14,7 @@ if __name__ == "__main__":
     from operator import attrgetter
     from d3is.item import Item
     from d3is.customJson import JsonItemEncoder
+    from filter import ExtractionFilter
     
     BASE_URL = 'https://eu.battle.net'
     ITEM_BASE_URL = 'https://eu.battle.net/d3/en/item/'
@@ -35,7 +36,7 @@ if __name__ == "__main__":
         category_items.sort(key=attrgetter('name'))
         return category_items
     
-    parser = Parser()
+    parser = Parser(ExtractionFilter())
     loader = Loader(BASE_URL)
     html = loader.load_item_index()
     
