@@ -120,13 +120,13 @@ class Parser(object):
                     items.append(Item(item_name, "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."))
                     continue
 
-                text = leg.find('span', class_='d3-color-ffff8000').parent
+                text = leg.find('span', class_='d3-color-ffff8000')
 
                 if text == None:
                     logging.debug("{} has no affix, skipping...".format(item_name))
                     continue
                 
-                item_text = text.text
+                item_text = text.parent.text
                 
                 items.append(Item(item_name, item_text))
             except(AttributeError):
