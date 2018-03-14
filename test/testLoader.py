@@ -6,7 +6,7 @@ from d3is.item import Item
 from betamax import Betamax
 from requests import Session
 
-BASE_URL = 'https://eu.battle.net'
+BASE_URL = 'https://eu.diablo3.com'
 
 CASSETTE_LIBRARY_DIR = 'test/cassettes'
 
@@ -19,8 +19,8 @@ CAT_WEAPONS_ITEM_COUNT = 23;
 PARSED_ITEM_COUNT = 38;
 
 class TestLoader(unittest.TestCase):
-    url_ring = 'https://us.battle.net/d3/en/item/ring/'
-    url_item = 'https://eu.battle.net/d3/en/item/'
+    url_ring = 'https://eu.diablo3.com/en/item/ring/'
+    url_item = 'https://eu.diablo3.com/en/item/'
 
     def setUp (self):
         session = Session()
@@ -37,7 +37,7 @@ class TestLoader(unittest.TestCase):
         self.cut = Loader(BASE_URL, session)
 
     def test_load_rings(self):
-        html = self.cut.load_items_html("/d3/en/item/ring/")
+        html = self.cut.load_items_html("/en/item/ring/")
         
         self.assertIn("Halo of Karini", html)
         
