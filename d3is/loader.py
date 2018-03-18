@@ -33,4 +33,4 @@ class Loader(object):
         '''
         Load the main item page.
         '''
-        return self.load_items_html('/d3/en/item/')
+        return self.load_items_html('/en/item/')

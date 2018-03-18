@@ -121,12 +121,20 @@ class Parser(object):
                     continue
 
                 text = leg.find('span', class_='d3-color-ffff8000')
+                class_name = leg.find('span', class_='d3-color-ffff0000')
+                range = leg.find('span', class_='d3-color-ff9b9b9b')
 
                 if text == None:
                     logging.debug("{} has no affix, skipping...".format(item_name))
                     continue
                 
-                item_text = text.parent.text
+                item_text = text.text
+
+                if class_name != None:
+                    item_text += (' ' + class_name.text)
+
+                if range != None:
+                    item_text += (' ' + range.text)
                 
                 items.append(Item(item_name, item_text))
             except(AttributeError):

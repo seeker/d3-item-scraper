@@ -17,8 +17,9 @@ CAT_WEAPONS_ITEM_COUNT = 29;
 PARSED_ITEM_COUNT = 36;
 
 class TestParser(unittest.TestCase):
-    url_ring = 'https://us.battle.net/d3/en/item/ring/'
-    url_item = 'https://eu.battle.net/d3/en/item/'
+    url_prefix = '/en/item'
+    url_ring = 'https://eu.diablo3.com/en/item/ring/'
+    url_item = 'https://eu.diablo3.com/en/item/'
 
     def setUp (self):
         session = Session()
@@ -73,28 +74,28 @@ class TestParser(unittest.TestCase):
         self.assertIn(CAT_JEWLRY, self.categories)
         
     def test_parse_category_weapons_dagger_link(self):
-        self.assertIn('/d3/en/item/dagger/',self.categories[CAT_WEAPONS])
+        self.assertIn(self.url_prefix + '/dagger/',self.categories[CAT_WEAPONS])
         
     def test_parse_category_armor_boots_link(self):
-        self.assertIn('/d3/en/item/boots/',self.categories[CAT_ARMOR])
+        self.assertIn(self.url_prefix + '/boots/',self.categories[CAT_ARMOR])
         
     def test_parse_category_jewelry_link(self):
-        self.assertListEqual(self.categories[CAT_JEWLRY], ['/d3/en/item/amulet/','/d3/en/item/ring/'])
+        self.assertListEqual(self.categories[CAT_JEWLRY], [self.url_prefix + '/amulet/',self.url_prefix + '/ring/'])
         
     def test_amulet_not_in_armor_category(self):
-        self.assertNotIn('/d3/en/item/amulet/', self.categories[CAT_ARMOR])
+        self.assertNotIn(self.url_prefix + '/amulet/', self.categories[CAT_ARMOR])
         
     def test_ring_not_in_armor_category(self):
-        self.assertNotIn('/d3/en/item/ring/', self.categories[CAT_ARMOR])
+        self.assertNotIn(self.url_prefix + '/ring/', self.categories[CAT_ARMOR])
         
     def test_follower_item_enchantress_not_in_weapons(self):
-        self.assertNotIn('/d3/en/item/enchantress-focus/',self.categories[CAT_ARMOR])
+        self.assertNotIn(self.url_prefix + '/enchantress-focus/',self.categories[CAT_ARMOR])
     
     def test_follower_item_scoundrel_not_in_weapons(self):
-        self.assertNotIn('/d3/en/item/scoundrel-token/',self.categories[CAT_ARMOR])
+        self.assertNotIn(self.url_prefix + '/scoundrel-token/',self.categories[CAT_ARMOR])
     
     def test_follower_item_templar_not_in_weapons(self):
-        self.assertNotIn('/d3/en/item/templar-relic/',self.categories[CAT_ARMOR])
+        self.assertNotIn(self.url_prefix + '/templar-relic/',self.categories[CAT_ARMOR])
         
     def test_weapon_type_count(self):
         self.assertEqual(len(self.categories[CAT_WEAPONS]), CAT_WEAPONS_ITEM_COUNT)
@@ -106,7 +107,7 @@ class TestParser(unittest.TestCase):
         self.assertEqual(len(self.categories[CAT_ARMOR]), CAT_ARMOR_ITEM_COUNT)     
 
     def test_shield_in_weapon_category(self):
-        self.assertIn('/d3/en/item/shield/', self.categories[CAT_WEAPONS])
+        self.assertIn(self.url_prefix + '/shield/', self.categories[CAT_WEAPONS])
 
     def test_item_filter(self):
         self.parse_pages(ExtractionFilter())
