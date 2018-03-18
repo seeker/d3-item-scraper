@@ -17,7 +17,7 @@ CAT_WEAPONS_ITEM_COUNT = 29;
 PARSED_ITEM_COUNT = 36;
 
 class TestParser(unittest.TestCase):
-    url_prefix = 'en/item'
+    url_prefix = '/en/item'
     url_ring = 'https://eu.diablo3.com/en/item/ring/'
     url_item = 'https://eu.diablo3.com/en/item/'
 
