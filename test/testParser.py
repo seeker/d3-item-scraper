@@ -2,6 +2,7 @@ import unittest
 
 from d3is.parser import Parser
 from d3is.item import Item
+from d3is.loader import Loader
 from betamax import Betamax
 from requests import Session
 from filter import ExtractionFilter
@@ -18,8 +19,8 @@ PARSED_ITEM_COUNT = 36;
 
 class TestParser(unittest.TestCase):
     url_prefix = '/en/item'
-    url_ring = 'https://eu.diablo3.com/en/item/ring/'
-    url_item = 'https://eu.diablo3.com/en/item/'
+    url_item = Loader.ITEM_BASE_URL
+    url_ring = url_item + 'ring/'
 
     def setUp (self):
         session = Session()
