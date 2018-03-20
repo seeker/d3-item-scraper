@@ -120,21 +120,11 @@ class Parser(object):
                     items.append(Item(item_name, "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."))
                     continue
 
-                text = leg.find('span', class_='d3-color-ffff8000')
-                class_name = leg.find('span', class_='d3-color-ffff0000')
-                range = leg.find('span', class_='d3-color-ff9b9b9b')
+                item_text = self.extract_item_affix(leg)
 
-                if text == None:
+                if item_text == None:
                     logging.debug("{} has no affix, skipping...".format(item_name))
                     continue
-                
-                item_text = text.text
-
-                if class_name != None:
-                    item_text += (' ' + class_name.text)
-
-                if range != None:
-                    item_text += (' ' + range.text)
                 
                 items.append(Item(item_name, item_text))
             except(AttributeError):
@@ -144,6 +134,24 @@ class Parser(object):
             self.filter_items(items)
 
         return items
+
+    def extract_item_affix(self, elem):
+        text = elem.find('span', class_='d3-color-ffff8000')
+        class_name = elem.find('span', class_='d3-color-ffff0000')
+        range = elem.find('span', class_='d3-color-ff9b9b9b')
+
+        if text == None:
+            return None
+
+        item_text = text.text
+
+        if class_name != None:
+            item_text += (' ' + class_name.text)
+
+        if range != None:
+            item_text += (' ' + range.text)
+
+        return item_text
     
     def pages(self, html):
         '''
