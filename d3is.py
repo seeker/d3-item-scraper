@@ -7,14 +7,12 @@ if __name__ == "__main__":
     import requests
     import logging
     import json
-    
-    from d3is.item import Item
+
     from d3is.parser import Parser
     from d3is.loader import Loader
     from operator import attrgetter
-    from d3is.item import Item
     from d3is.customJson import JsonItemEncoder
-    from filter import ExtractionFilter
+    from d3is.filter import ExtractionFilter
     
     BASE_URL = Loader.BASE_URL
     ITEM_BASE_URL = Loader.ITEM_BASE_URL
