@@ -8,7 +8,7 @@ from requests import Session
 import logging
 
 class Loader(object):
-    BASE_URL = 'https://eu.diablo3.com/en/'
+    BASE_URL = 'https://eu.diablo3.com/'
     ITEM_BASE_URL = 'https://eu.diablo3.com/en/item/'
 
     '''
@@ -36,4 +36,4 @@ class Loader(object):
         '''
         Load the main item page.
         '''
-        return self.load_items_html('item/')
+        return self.load_items_html('en/item/')

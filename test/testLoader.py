@@ -40,7 +40,7 @@ class TestLoader(unittest.TestCase):
 
     def test_load_rings(self):
         with self.recorder.use_cassette('ring-page'):
-            html = self.cut.load_items_html("item/ring/")
+            html = self.cut.load_items_html("en/item/ring/")
         
         self.assertIn("Halo of Karini", html)
         
