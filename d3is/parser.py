@@ -99,19 +99,35 @@ class Parser(object):
         return categories;
 
     def items(self, html):
-        '''
-        Get the items on a item page.
-        Only items with an orange affix text will be included.
-        '''
+        """
+        Parse and return the items on a item page.
+        Only items with an orange affix text will be returned.
+        :param html: html of a page to parse
+        :return: a array of items with a legendary affix
+        """
         
         rows = BeautifulSoup(html, "html.parser")
         legendaries = rows.select("tr.legendary")
-        
+        set_items = rows.select("tr.set")
+
+        items = self.extract_items('d3-color-orange', legendaries)
+        sets = self.extract_items('d3-color-green',set_items)
+        items.extend(sets)
+
+        return items
+
+    def extract_items(self, class_, item_elements):
+        """
+        Extract item data from elements. Only items with a legendary affix will be extracted.
+        :param class_: class that identifies the item name
+        :param item_elements: elements containing items to extract
+        :return: a array of extracted items
+        """
         items = []
-        
-        for leg in legendaries:
+
+        for element in item_elements:
             try:
-                item_name = leg.find('a', class_='d3-color-orange').text
+                item_name = element.find('a', class_=class_).text
 
                 if item_name == "Ring of Royal Grandeur":
                     '''
@@ -120,12 +136,12 @@ class Parser(object):
                     items.append(Item(item_name, "Reduces the number of items needed for set bonuses by 1 (to a minimum of 2)."))
                     continue
 
-                item_text = self.extract_item_affix(leg)
+                item_text = self.extract_item_affix(element)
 
                 if item_text == None:
                     logging.debug("{} has no affix, skipping...".format(item_name))
                     continue
-                
+
                 items.append(Item(item_name, item_text))
             except(AttributeError):
                 logging.error("Failed to parse {}".format(item_name))
@@ -136,6 +152,11 @@ class Parser(object):
         return items
 
     def extract_item_affix(self, elem):
+        """
+        Extract the legendary affix of an item, if any.
+        :param elem: the item for which to extract the affix
+        :return: the affix text, or None if there is no affix
+        """
         text = elem.find('span', class_='d3-color-ffff8000')
         class_name = elem.find('span', class_='d3-color-ffff0000')
         range = elem.find('span', class_='d3-color-ff9b9b9b')
