@@ -16,8 +16,8 @@ if __name__ == "__main__":
     from d3is.customJson import JsonItemEncoder
     from filter import ExtractionFilter
     
-    BASE_URL = 'https://eu.diablo3.com/en/'
-    ITEM_BASE_URL = 'https://eu.diablo3.com/en/item/'
+    BASE_URL = Loader.BASE_URL
+    ITEM_BASE_URL = Loader.ITEM_BASE_URL
 
     logging.basicConfig(level=logging.INFO)
     

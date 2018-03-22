@@ -2,6 +2,7 @@ import unittest
 
 from d3is.parser import Parser
 from d3is.item import Item
+from d3is.loader import Loader
 from betamax import Betamax
 from requests import Session
 from filter import ExtractionFilter
@@ -14,12 +15,13 @@ CAT_JEWLRY = 'jewelry'
 
 CAT_ARMOR_ITEM_COUNT = 13;
 CAT_WEAPONS_ITEM_COUNT = 29;
-PARSED_ITEM_COUNT = 36;
+PARSED_ITEM_COUNT = 65;
 
 class TestParser(unittest.TestCase):
     url_prefix = '/en/item'
-    url_ring = 'https://eu.diablo3.com/en/item/ring/'
-    url_item = 'https://eu.diablo3.com/en/item/'
+    url_item = Loader.ITEM_BASE_URL
+    url_ring = url_item + 'ring/'
+    url_bracer = url_item + 'bracers/'
 
     def setUp (self):
         session = Session()
@@ -32,6 +34,9 @@ class TestParser(unittest.TestCase):
             
         with recorder.use_cassette('item-page'):
             self.item_page = session.get(self.url_item).text
+
+        with recorder.use_cassette('bracer-page'):
+            self.bracer_page = session.get(self.url_bracer).text
         
         self.parse_pages()
 
@@ -39,6 +44,7 @@ class TestParser(unittest.TestCase):
         self.cut = Parser(item_filter)
         self.categories = self.cut.categories(self.get_item_page())
         self.items = self.cut.items(self.get_ring_page())
+        self.items.extend(self.cut.items(self.bracer_page))
 
     def get_ring_page(self):
         return self.ring_page
@@ -113,3 +119,6 @@ class TestParser(unittest.TestCase):
         self.parse_pages(ExtractionFilter())
 
         self.assertNotIn(Item("Hellfire Ring", "Chance on hit to engulf the ground in lava, dealing 200% weapon damage per second for 6 seconds."), self.items)
+
+    def test_set_item(self):
+        self.assertIn(Item("Krelm's Buff Bracers", "You are immune to Knockback and Stun effects."),self.items)

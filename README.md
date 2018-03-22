@@ -1,5 +1,5 @@
 # d3-item-scraper
-Script to scrape Diablo 3 legendary items.
+Script to scrape Diablo 3 items.
 
-- Only legendary items with an affix are processed
+- Only items with a legendary affix are processed
 - Parsed items are output into `items.json`
