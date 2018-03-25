@@ -6,7 +6,7 @@ class ExtractionFilter:
     Class to filter items that cannot be extracted with Kanai's cube.
     """
 
-    excluded_items = ['Hellfire']
+    excluded_items = ['Hellfire', 'Paddle', 'Pig Sticker', 'Cluckeye', 'Ashbringer']
 
     def filter_item_name(self, item):
         """
