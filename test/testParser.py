@@ -5,7 +5,7 @@ from d3is.item import Item
 from d3is.loader import Loader
 from betamax import Betamax
 from requests import Session
-from filter import ExtractionFilter
+from d3is.filter import ExtractionFilter
 
 CASSETTE_LIBRARY_DIR = 'test/cassettes'
 

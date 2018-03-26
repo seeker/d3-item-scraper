@@ -1,7 +1,7 @@
 import unittest
 
-from filter import ExtractionFilter
-from item import Item
+from d3is.filter import ExtractionFilter
+from d3is.item import Item
 
 class Test(unittest.TestCase):
     def setUp(self):

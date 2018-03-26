@@ -10,7 +10,8 @@ requirements = [
 
 test_requirements = [
     'betamax',
-    'nose'
+    'nose',
+    'coverage'
 ]
 
 setup(name='d3-item-scraper',

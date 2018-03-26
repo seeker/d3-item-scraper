@@ -1,0 +1,12 @@
+sudo: false
+language: python
+python:
+    - "3.6"
+install:
+  pip install -e .[dev]
+
+jobs:
+  include:
+    - stage: test
+      script: nosetests -d --with-coverage
+      after_success: bash <(curl -s https://codecov.io/bash)
