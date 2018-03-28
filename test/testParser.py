@@ -52,6 +52,13 @@ class TestParser(unittest.TestCase):
     def get_item_page(self):
         return self.item_page
 
+    def get_item_by_name(self, item_name):
+        for item in self.items:
+            if item.name == item_name:
+                return item
+
+        return None
+
     def test_parsed_item_count(self):
         self.assertEqual(len(self.items), PARSED_ITEM_COUNT)
         
@@ -124,11 +131,7 @@ class TestParser(unittest.TestCase):
         self.assertIn(Item("Krelm's Buff Bracers", "You are immune to Knockback and Stun effects."),self.items)
 
     def test_wizard_restriction(self):
-        test_item = None
-        for item in self.items:
-            if item.name == "Manald Heal":
-                test_item = item
-                break
+        test_item = self.get_item_by_name("Manald Heal")
 
         self.assertEqual(test_item.class_restriction, "Wizard")
 
