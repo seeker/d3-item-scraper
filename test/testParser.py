@@ -23,12 +23,12 @@ class TestParser(unittest.TestCase):
     url_ring = url_item + 'ring/'
     url_bracer = url_item + 'bracers/'
 
-    def setUp (self):
+    def setUp(self):
         session = Session()
         recorder = Betamax(
             session, cassette_library_dir=CASSETTE_LIBRARY_DIR
         )
-    
+
         with recorder.use_cassette('ring-page'):
             self.ring_page = session.get(self.url_ring).text
             
@@ -122,3 +122,43 @@ class TestParser(unittest.TestCase):
 
     def test_set_item(self):
         self.assertIn(Item("Krelm's Buff Bracers", "You are immune to Knockback and Stun effects."),self.items)
+
+    def test_wizard_restriction(self):
+        test_item = None
+        for item in self.items:
+            if item.name == "Manald Heal":
+                test_item = item
+                break
+
+        self.assertEqual(test_item.class_restriction, "Wizard")
+
+    def test_barbarian_restriction(self):
+        test_item = self.get_item_by_name("Band of Might")
+
+        self.assertEqual(test_item.class_restriction, "Barbarian")
+
+    def test_necromancer_restriction(self):
+        test_item = self.get_item_by_name("Circle of Nailuj's Evol")
+
+        self.assertEqual(test_item.class_restriction, "Necromancer")
+
+    def test_monk_restriction(self):
+        test_item = self.get_item_by_name("Band of the Rue Chambers")
+
+        self.assertEqual(test_item.class_restriction, "Monk")
+
+    def test_witch_doctor_restriction(self):
+        test_item = self.get_item_by_name("The Short Man's Finger")
+
+        self.assertEqual(test_item.class_restriction, "Witch Doctor")
+
+    def test_crusader_restriction(self):
+        test_item = self.get_item_by_name("Eternal Union")
+
+        self.assertEqual(test_item.class_restriction, "Crusader")
+
+    def test_demon_hunter_restriction(self):
+        test_item = self.get_item_by_name("Elusive Ring")
+
+        self.assertEqual(test_item.class_restriction, "Demon Hunter")
+
