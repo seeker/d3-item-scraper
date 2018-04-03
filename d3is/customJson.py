@@ -15,6 +15,8 @@ class JsonItemEncoder(JSONEncoder):
             item = {}
             item['name'] = o.name
             item['affix'] = o.affix
+            if o.class_restriction is not None:
+                item['restriction'] = o.class_restriction
         except TypeError:
             pass
         else:
