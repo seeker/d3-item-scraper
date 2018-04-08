@@ -8,5 +8,5 @@ install:
 jobs:
   include:
     - stage: test
-      script: cover.sh
+      script: ./cover.sh
       after_success: bash <(curl -s https://codecov.io/bash)
