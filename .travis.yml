@@ -8,5 +8,5 @@ install:
 jobs:
   include:
     - stage: test
-      script: nosetests -d --with-coverage
+      script: cover.sh
       after_success: bash <(curl -s https://codecov.io/bash)
