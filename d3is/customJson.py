@@ -4,6 +4,7 @@ Created on 6 Jul 2017
 @author: Nicholas Wright
 '''
 from json import JSONEncoder
+from d3is.item import Item
 
 class JsonItemEncoder(JSONEncoder):
     '''
@@ -11,15 +12,12 @@ class JsonItemEncoder(JSONEncoder):
     '''
 
     def default(self, o):
-        try:
+        if isinstance(o, Item):
             item = {}
             item['name'] = o.name
             item['affix'] = o.affix
             if o.class_restriction is not None:
                 item['restriction'] = o.class_restriction
-        except TypeError:
-            pass
-        else:
             return item
 
         return JSONEncoder.default(self, o)
