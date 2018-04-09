@@ -16,6 +16,7 @@ class Parser(object):
     filter_ul = SoupStrainer('ul')
     
     follower_item_filter = re.compile('.*(enchantress\-focus|scoundrel\-token|templar\-relic)/$')
+    class_restriction_pattern = re.compile('.*(Wizard|Barbarian|Monk|Demon Hunter|Necromancer|Crusader|Witch Doctor) Only.*')
 
     def __init__(self, item_filter=None):
         self.item_filter = item_filter
@@ -142,7 +143,7 @@ class Parser(object):
                     logging.debug("{} has no affix, skipping...".format(item_name))
                     continue
 
-                items.append(Item(item_name, item_text))
+                items.append(Item(item_name, item_text, self.get_class_restriction(item_text)))
             except(AttributeError):
                 logging.error("Failed to parse {}".format(item_name))
 
@@ -182,3 +183,15 @@ class Parser(object):
         ul = BeautifulSoup(html, 'html.parser', parse_only=self.filter_ul)
         pagination = ul.find('ul', class_='ui-pagination')
         return len(pagination.find_all('a'))
+
+    def get_class_restriction(self, affix):
+        """
+        Checks if the affix contains a class restriction
+        :return: the class the item restricted to, as a string
+        """
+        match = self.class_restriction_pattern.match(affix)
+
+        if match is None:
+            return None
+        else:
+            return match.group(1)

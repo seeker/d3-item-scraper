@@ -10,6 +10,7 @@ dist/
 # coverage directories
 /.coverage
 /htmlcov
+/cover
 
 # ignore IDE project files
 /.pydevproject

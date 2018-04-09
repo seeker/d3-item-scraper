@@ -17,40 +17,47 @@ CAT_ARMOR_ITEM_COUNT = 13;
 CAT_WEAPONS_ITEM_COUNT = 29;
 PARSED_ITEM_COUNT = 65;
 
+ITEMS = None
+
 class TestParser(unittest.TestCase):
     url_prefix = '/en/item'
     url_item = Loader.ITEM_BASE_URL
     url_ring = url_item + 'ring/'
     url_bracer = url_item + 'bracers/'
 
-    def setUp (self):
+    @classmethod
+    def setUpClass(cls):
         session = Session()
         recorder = Betamax(
             session, cassette_library_dir=CASSETTE_LIBRARY_DIR
         )
-    
+
         with recorder.use_cassette('ring-page'):
-            self.ring_page = session.get(self.url_ring).text
+            cls.ring_page = session.get(cls.url_ring).text
             
         with recorder.use_cassette('item-page'):
-            self.item_page = session.get(self.url_item).text
+            cls.item_page = session.get(cls.url_item).text
 
         with recorder.use_cassette('bracer-page'):
-            self.bracer_page = session.get(self.url_bracer).text
+            cls.bracer_page = session.get(cls.url_bracer).text
         
-        self.parse_pages()
+        cls.parse_pages(cls)
 
-    def parse_pages(self, item_filter = None):
-        self.cut = Parser(item_filter)
-        self.categories = self.cut.categories(self.get_item_page())
-        self.items = self.cut.items(self.get_ring_page())
-        self.items.extend(self.cut.items(self.bracer_page))
+    def setUp(self):
+        self.items = TestParser.ITEMS
 
-    def get_ring_page(self):
-        return self.ring_page
-    
-    def get_item_page(self):
-        return self.item_page
+    def parse_pages(cls, item_filter = None):
+        cls.cut = Parser(item_filter)
+        cls.categories = cls.cut.categories(cls.item_page)
+        cls.ITEMS = cls.cut.items(cls.ring_page)
+        cls.ITEMS.extend(cls.cut.items(cls.bracer_page))
+
+    def get_item_by_name(self, item_name):
+        for item in self.items:
+            if item.name == item_name:
+                return item
+
+        return None
 
     def test_parsed_item_count(self):
         self.assertEqual(len(self.items), PARSED_ITEM_COUNT)
@@ -68,7 +75,7 @@ class TestParser(unittest.TestCase):
         self.assertIn(Item("Briggs' Wrath","Uncursed enemies are pulled to the target location when a curse is applied to them. (Necromancer Only)"), self.items)
 
     def test_parsed_pages(self):
-        self.assertEqual(self.cut.pages(self.get_ring_page()), 3)
+        self.assertEqual(self.cut.pages(self.ring_page), 3)
         
     def test_parse_category_weapons(self):
         self.assertIn(CAT_WEAPONS, self.categories)
@@ -118,7 +125,43 @@ class TestParser(unittest.TestCase):
     def test_item_filter(self):
         self.parse_pages(ExtractionFilter())
 
-        self.assertNotIn(Item("Hellfire Ring", "Chance on hit to engulf the ground in lava, dealing 200% weapon damage per second for 6 seconds."), self.items)
+        self.assertNotIn(Item("Hellfire Ring", "Chance on hit to engulf the ground in lava, dealing 200% weapon damage per second for 6 seconds."), self.ITEMS)
 
     def test_set_item(self):
         self.assertIn(Item("Krelm's Buff Bracers", "You are immune to Knockback and Stun effects."),self.items)
+
+    def test_wizard_restriction(self):
+        test_item = self.get_item_by_name("Manald Heal")
+
+        self.assertEqual(test_item.class_restriction, "Wizard")
+
+    def test_barbarian_restriction(self):
+        test_item = self.get_item_by_name("Band of Might")
+
+        self.assertEqual(test_item.class_restriction, "Barbarian")
+
+    def test_necromancer_restriction(self):
+        test_item = self.get_item_by_name("Circle of Nailuj's Evol")
+
+        self.assertEqual(test_item.class_restriction, "Necromancer")
+
+    def test_monk_restriction(self):
+        test_item = self.get_item_by_name("Band of the Rue Chambers")
+
+        self.assertEqual(test_item.class_restriction, "Monk")
+
+    def test_witch_doctor_restriction(self):
+        test_item = self.get_item_by_name("The Short Man's Finger")
+
+        self.assertEqual(test_item.class_restriction, "Witch Doctor")
+
+    def test_crusader_restriction(self):
+        test_item = self.get_item_by_name("Eternal Union")
+
+        self.assertEqual(test_item.class_restriction, "Crusader")
+
+    def test_demon_hunter_restriction(self):
+        test_item = self.get_item_by_name("Elusive Ring")
+
+        self.assertEqual(test_item.class_restriction, "Demon Hunter")
+
