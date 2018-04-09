@@ -10,3 +10,15 @@ jobs:
     - stage: test
       script: ./cover.sh
       after_success: bash <(curl -s https://codecov.io/bash)
+    - stage: deploy
+      script:
+        - python d3is.py
+        - mkdir dist
+        - cp items.json dist/
+      deploy:
+        provider: pages
+        skip_cleanup: true
+        local_dir: dist
+        github_token: $GITHUB_OAUTH_TOKEN
+#        on:
+#          branch: master
