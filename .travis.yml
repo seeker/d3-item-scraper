@@ -14,6 +14,7 @@ jobs:
       if: branch = canary
       script:
         - rm test/cassettes/*
+        - ls test/cassettes/
         - ./cover.sh
     - stage: deploy
       if: branch = master
