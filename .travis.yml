@@ -11,6 +11,7 @@ jobs:
       script: ./cover.sh
       after_success: bash <(curl -s https://codecov.io/bash)
     - stage: deploy
+      if: branch = master
       script:
         - python d3is.py
         - mkdir dist
